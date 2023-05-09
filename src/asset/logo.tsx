@@ -1,0 +1,1 @@
+export const logo="https://www.freepnglogos.com/uploads/statue-of-liberty/new-york-city-logo-transparent-png-30.png"
