@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSearchedStories } from "../actions/searchAction";
-import { Stories } from "./newsSlice";
+import { fetchApiSearchedStories } from "../actions/searchAction";
+import { results } from "./newsSlice";
 
 export interface SearchTerm {
   searchTerm: string;
@@ -8,11 +8,11 @@ export interface SearchTerm {
 const recentSearches: string[] = [];
 const initialState = {
   searchTerm: {} as SearchTerm,
-  searchedStories: {} as Stories,
+  searchedStories: {
+    results,
+  },
   recentSearches,
-  loading: false,
   success: false,
-  error: null,
 };
 
 const searchSlice = createSlice({
@@ -32,16 +32,9 @@ const searchSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getSearchedStories.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getSearchedStories.fulfilled, (state, action) => {
-      state.loading = false;
+    builder.addCase(fetchApiSearchedStories.fulfilled, (state, action) => {
       state.searchedStories.results = action.payload.response.docs;
       state.success = true;
-    });
-    builder.addCase(getSearchedStories.rejected, (state) => {
-      state.success = false;
     });
   },
 });

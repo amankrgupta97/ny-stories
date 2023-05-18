@@ -1,18 +1,22 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { apiKey } from "../constants/apiKey";
 import { SearchTerm } from "../slice/searchSlice";
+import httpSearchClient from "../controllers/httpSearchClient";
 
-const actionTypes = {
-  SEARCHSTORIES: "search/SEARCHSTORIES",
+export const actionTypes = {
+  SEARCHSTORIES: "search/fetchStories",
 };
 
-export const getSearchedStories = createAsyncThunk(
+export const fetchApiSearchedStories = createAsyncThunk(
   actionTypes.SEARCHSTORIES,
-  async (searchTerm: SearchTerm) => {
-    const response = await axios.get(
-      `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchTerm.searchTerm}&api-key=${apiKey}`
-    );
-    return response.data;
+  async (searchTerm: SearchTerm, { rejectWithValue }) => {
+    try {
+      const response = await httpSearchClient.get(
+        `/search/v2/articlesearch.json?q=${searchTerm.searchTerm}`
+      );
+      return response.data;
+    } catch (err: any) {
+      if (!err.response) throw err;
+      return rejectWithValue(err.response.data);
+    }
   }
 );

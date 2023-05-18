@@ -7,17 +7,12 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const StoriesCard = (props: any) => {
-  // const { id } = props;
-  // const { type } = props;
+  const { id } = props;
+  const { type } = props;
   const { data } = props;
-
-  const handleSeeMore = () => {
-    if (data.url !== null) window.open(data.url);
-    else alert("link Unavailable");
-  };
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card sx={{ maxWidth: 345, mt: 5, minHeight: 500, maxHeight: 500 }}>
@@ -44,11 +39,9 @@ const StoriesCard = (props: any) => {
           </Typography>
         </CardContent>
         <CardActions>
-          {/* <Link to={`/stories-detail/${type}/${id}`}> */}
-          <Button size="small" onClick={handleSeeMore}>
-            See More
-          </Button>
-          {/* // </Link> */}
+          <Link to={`/stories-detail/${type}/${id}`}>
+            <Button size="small">See More</Button>
+          </Link>
         </CardActions>
       </Card>
     </Grid>

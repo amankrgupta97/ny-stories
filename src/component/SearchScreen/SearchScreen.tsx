@@ -8,11 +8,14 @@ import {
   TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { useSelector } from "react-redux";
-import { getSearchedStories } from "../../actions/searchAction";
+import { fetchApiSearchedStories } from "../../actions/searchAction";
 import { useAppDispatch } from "../../hook/useAppDispatch";
+import { useAppSelector } from "../../hook/useAppSelector";
+import {
+  getSearchStatus,
+  getSearchedStories,
+} from "../../selector/searchSelector";
 import { appendToRecentSearch, setSearchTerm } from "../../slice/searchSlice";
-import { RootState } from "../../store";
 import RecentSearches from "../RecentSearches/RecentSearches";
 import SearchedStories from "../SearchedStories/SearchedStories";
 import { style } from "./SearchScreenStyle";
@@ -22,17 +25,15 @@ const SearchScreen = () => {
     searchTerm: "",
   };
 
-  const status = useSelector((state: RootState) => state.search.success);
-  const searchResult = useSelector(
-    (state: RootState) => state.search.searchedStories
-  );
+  const status = useAppSelector(getSearchStatus);
+  const searchResult = useAppSelector(getSearchedStories);
   const dispatch = useAppDispatch();
   const { values, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: initialValue,
     onSubmit: (values) => {
       dispatch(setSearchTerm(values));
       dispatch(appendToRecentSearch());
-      dispatch(getSearchedStories(values));
+      dispatch(fetchApiSearchedStories(values));
     },
   });
   return (

@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../../hook/useAppDispatch";
 import {
-  getScienceStories,
-  getTopStories,
-  getWorldStories,
+  fetchApiScienceStories,
+  fetchApiTopStories,
+  fetchApiWorldStories,
 } from "../../actions/newsActions";
 import TopStoriesListing from "../TopStoriesListing/TopStoriesListing";
 
 const Home = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getTopStories());
-    dispatch(getWorldStories());
-    dispatch(getScienceStories());
+    dispatch(fetchApiTopStories());
+    dispatch(fetchApiWorldStories());
+    dispatch(fetchApiScienceStories());
   }, [dispatch]);
 
   return <TopStoriesListing />;

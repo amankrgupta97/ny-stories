@@ -5,17 +5,20 @@ import { RootState } from "../../store";
 import Logout from "../Logout/Logout";
 import ".//Header.css";
 
-const Header: React.FC = () => {
-  const isLogin = useSelector((state: RootState) => state.auth.success);
+interface HeaderProps {
+  isLogged: boolean;
+}
+const Header: React.FC<HeaderProps> = ({ isLogged }) => {
+  // const isLogin = useSelector((state: RootState) => state.auth.success);
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar>
           <img src={logo} alt="logo" />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             NY Stories
           </Typography>
-          {isLogin ? <Logout /> : <></>}
+          {isLogged ? <Logout /> : <></>}
         </Toolbar>
       </AppBar>
     </Box>

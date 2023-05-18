@@ -1,36 +1,52 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { apiKey } from "../constants/apiKey";
+import {
+  SCIENCESTORIESCONFIG,
+  TOPSTORIESCONFIG,
+  WORLDSTORIESCONFIG,
+} from "../helpers/constants";
 
-const actionTypes = {
-  TOPSTORIES: "news/TOPSTORIES",
-  WORLD: "news/WORLD",
-  SCIENCE: "news/SCIENCE",
+export const actionTypes = {
+  TOPSTORIES: "news/fetchTopStories",
+  WORLD: "news/fetchWorldStories",
+  SCIENCE: "news/fetchScienceStories",
 };
 
-export const getTopStories = createAsyncThunk(
+export const fetchApiTopStories = createAsyncThunk(
   actionTypes.TOPSTORIES,
-  async () => {
-    const response = await axios.get(
-      `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`
-    );
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios(TOPSTORIESCONFIG);
+      return response.data;
+    } catch (err: any) {
+      if (!err.response) throw err;
+      return rejectWithValue(err.response.data);
+    }
   }
 );
 
-export const getWorldStories = createAsyncThunk(actionTypes.WORLD, async () => {
-  const response = await axios.get(
-    `https://api.nytimes.com/svc/topstories/v2/world.json?api-key=${apiKey}`
-  );
-  return response.data;
-});
+export const fetchApiWorldStories = createAsyncThunk(
+  actionTypes.WORLD,
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios(WORLDSTORIESCONFIG);
+      return response.data;
+    } catch (err: any) {
+      if (!err.response) throw err;
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
-export const getScienceStories = createAsyncThunk(
+export const fetchApiScienceStories = createAsyncThunk(
   actionTypes.SCIENCE,
-  async () => {
-    const response = await axios.get(
-      `https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${apiKey}`
-    );
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios(SCIENCESTORIESCONFIG);
+      return response.data;
+    } catch (err: any) {
+      if (!err.response) throw err;
+      return rejectWithValue(err.response.data);
+    }
   }
 );

@@ -1,13 +1,12 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../hook/useAppSelector";
+import { getRecentSearches } from "../../selector/searchSelector";
+
 import { style } from "./RecentSearchesStyle";
 
 const RecentSearches = () => {
-  const recentSearches = useSelector(
-    (state: RootState) => state.search.recentSearches
-  );
+  const recentSearches = useAppSelector(getRecentSearches);
   return (
     <Box sx={{ mt: 1 }}>
       <Typography variant="body1">Recent Searches</Typography>

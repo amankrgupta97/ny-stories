@@ -10,14 +10,17 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { style } from "./LoginStyle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { login, signUp } from "../../actions/userActions";
 import { useAppDispatch } from "../../hook/useAppDispatch";
 import { useFormik } from "formik";
 import { formValidation } from "../../validation";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hook/useAppSelector";
+import { getAuthStatus } from "../../selector/userSelector";
 const Login: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const authSuccess = useAppSelector(getAuthStatus);
   const dispatch = useAppDispatch();
   const initialValues = {
     email: "",
@@ -31,6 +34,7 @@ const Login: React.FC = () => {
       onSubmit: (values, { resetForm }) => {
         if (isSignUp) {
           dispatch(signUp(values));
+          setIsSignUp(false);
           navigate("/login");
           resetForm({
             values: {
@@ -40,10 +44,15 @@ const Login: React.FC = () => {
           });
         } else {
           dispatch(login(values));
-          setTimeout(() => navigate("/"), 5000);
         }
       },
     });
+
+  useEffect(() => {
+    if (authSuccess) {
+      navigate("/");
+    }
+  }, [authSuccess, navigate]);
 
   return (
     <div>

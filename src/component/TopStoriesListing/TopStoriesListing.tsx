@@ -5,23 +5,21 @@ import ScienceOutlinedIcon from "@mui/icons-material/ScienceOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { style } from "./TopStoriesListingStyle";
 import StoriesCard from "../StoriesCard/StoriesCard";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import { useAppSelector } from "../../hook/useAppSelector";
+import {
+  getScienceStories,
+  getTopStories,
+  getWorldStories,
+} from "../../selector/newsSelector";
 
 const TopStoriesListing = () => {
   const [isWorld, setIsWorld] = useState(false);
   const [isScience, setIsScience] = useState(false);
-  const status = useSelector((state: RootState) => state.news.success);
-  const topStories = useSelector((state: RootState) => state.news.topStories);
-  const worldStories = useSelector(
-    (state: RootState) => state.news.worldStories
-  );
-  const scienceStories = useSelector(
-    (state: RootState) => state.news.scienceStories
-  );
+  const topStories = useAppSelector(getTopStories);
+  const worldStories = useAppSelector(getWorldStories);
+  const scienceStories = useAppSelector(getScienceStories);
   const navigate = useNavigate();
   const handleWorldStories = () => {
     setIsScience(false);
@@ -76,9 +74,7 @@ const TopStoriesListing = () => {
         </Box>
         <Box>
           <Grid container spacing={2}>
-            {!status ? (
-              <LoadingScreen />
-            ) : status && !isScience && !isWorld ? (
+            {!isScience && !isWorld ? (
               topStories.results.map((stories, index) => (
                 <StoriesCard
                   key={index}
@@ -87,7 +83,7 @@ const TopStoriesListing = () => {
                   type={"topStories"}
                 />
               ))
-            ) : status && isWorld ? (
+            ) : isWorld ? (
               worldStories.results.map((stories, index) => (
                 <StoriesCard
                   key={index}
@@ -96,7 +92,7 @@ const TopStoriesListing = () => {
                   id={index}
                 />
               ))
-            ) : status && isScience ? (
+            ) : isScience ? (
               scienceStories.results.map((stories, index) => (
                 <StoriesCard
                   key={index}

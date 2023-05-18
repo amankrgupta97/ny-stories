@@ -1,33 +1,106 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-// import { useSelector } from "react-redux";
-// import { useParams } from "react-router-dom";
-// import { RootState } from "../../store";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../hook/useAppSelector";
+import { getAllStories } from "../../selector/newsSelector";
 
 const StoriesDetail = () => {
-  // const { id } = useParams() as { id: string };
-  // const { type } = useParams() as { type: string };
-  // const data = useSelector((state: RootState) => state.news);
+  const { id } = useParams() as { id: any };
+  const { type } = useParams() as { type: string };
+  const data = useAppSelector(getAllStories);
+  const handleCheckSource = () => {
+    if (type === "topStories") {
+      if (data.topStories.results[id].url !== null) {
+        window.open(data.topStories.results[id].url);
+      } else alert("link Unavailable");
+    } else if (type === "worldStories") {
+      if (data.worldStories.results[id].url !== null)
+        window.open(data.worldStories.results[id].url);
+      else alert("link Unavailable");
+    } else if (type === "scienceStories") {
+      if (data.scienceStories.results[id].url !== null)
+        window.open(data.scienceStories.results[id].url);
+      else alert("link Unavailable");
+    }
+  };
   return (
-    <Box>
-      <Card sx={{ maxWidth: 600, mt: 5, minHeight: 500, maxHeight: 500 }}>
+    <Box
+      sx={{
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Card>
         <CardMedia
           component="img"
-          alt=""
-          height="140"
-          image=""
-          //   data !== undefined && data.multimedia !== null
-          //     ? data.multimedia[0].url
-          //     : "unavialable"
-          // }
+          alt={
+            type === "topStories"
+              ? data.topStories.results[id].multimedia !== null
+                ? data.topStories.results[id].multimedia[0].caption
+                : null
+              : type === "worldStories"
+              ? data.worldStories.results[id].multimedia !== null
+                ? data.worldStories.results[id].multimedia[0].caption
+                : null
+              : type === "scienceStories"
+              ? data.scienceStories.results[id].multimedia !== null
+                ? data.scienceStories.results[id].multimedia[0].caption
+                : null
+              : null
+          }
+          height="400"
+          image={
+            type === "topStories"
+              ? data.topStories.results[id].multimedia !== null
+                ? data.topStories.results[id].multimedia[0].url
+                : null
+              : type === "worldStories"
+              ? data.worldStories.results[id].multimedia !== null
+                ? data.worldStories.results[id].multimedia[0].url
+                : null
+              : type === "scienceStories"
+              ? data.scienceStories.results[id].multimedia !== null
+                ? data.scienceStories.results[id].multimedia[0].url
+                : null
+              : null
+          }
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {/* {data.title} */}
+            {type === "topStories" ? (
+              data.topStories.results[id].title
+            ) : type === "worldStories" ? (
+              data.worldStories.results[id].title
+            ) : type === "scienceStories" ? (
+              data.scienceStories.results[id].title
+            ) : (
+              <></>
+            )}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {/* {data.abstract} */}
+            {type === "topStories" ? (
+              data.topStories.results[id].abstract
+            ) : type === "worldStories" ? (
+              data.worldStories.results[id].abstract
+            ) : type === "scienceStories" ? (
+              data.scienceStories.results[id].abstract
+            ) : (
+              <></>
+            )}
           </Typography>
         </CardContent>
+        <CardActions>
+          <Button onClick={handleCheckSource}>Check Source</Button>
+        </CardActions>
       </Card>
     </Box>
   );
